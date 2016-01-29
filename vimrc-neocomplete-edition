@@ -1,0 +1,528 @@
+set nocompatible              " be improved, required
+filetype off                  " required
+set laststatus=2 " Let airline appear all the time
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required:
+    Plugin 'VundleVim/Vundle.vim'
+    Plugin 'bling/vim-airline'
+    Plugin 'kien/ctrlp.vim'
+    Plugin 'tacahiroy/ctrlp-funky'
+    Plugin 'bling/vim-bufferline'
+    Plugin 'sjl/gundo.vim'
+    Plugin 'scrooloose/nerdtree'
+    Plugin 'majutsushi/tagbar'
+    Plugin 'airblade/vim-gitgutter'
+    Plugin 'mhinz/vim-signify'
+    Plugin 'scrooloose/syntastic'
+    Plugin 'jeetsukumaran/vim-buffergator'
+    Plugin 'scrooloose/nerdcommenter'
+    Plugin 'vim-scripts/DoxygenToolkit.vim'
+    Plugin 'terryma/vim-expand-region'
+    Plugin 'rosenfeld/conque-term'
+    Plugin 'easymotion/vim-easymotion'
+    Plugin 'haya14busa/incsearch.vim'
+    Plugin 'haya14busa/incsearch-fuzzy.vim'
+    Plugin 'haya14busa/incsearch-easymotion.vim'
+    Plugin 'dkprice/vim-easygrep'
+    Plugin 'honza/vim-snippets'
+    Plugin 'Shougo/neocomplete'
+    Plugin 'SirVer/ultisnips'
+
+
+    " All of your Plugins must be added before the following line
+    call vundle#end()            " required
+    filetype plugin indent on    " required
+    " To ignore plugin indent changes, instead use:
+    "filetype plugin on
+    "
+    " Brief help
+    " :PluginList       - lists configured plugins
+    " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+    " :PluginSearch foo - searches for foo; append `!` to refresh local cache
+    " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+    "
+    " see :h vundle for more details or wiki for FAQ
+    " Put your non-Plugin stuff after this line
+
+
+
+"-----------------------------------------------------------------
+" General Settings
+"-----------------------------------------------------------------
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+set mouse=v
+syntax on                   " 自动语法高亮
+set cc=80                   " 设置 80 column 高亮
+filetype on
+filetype plugin on
+colorscheme molokai         " 设定配色方案
+highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
+" this must be after colorscheme if the default highlight color is not you want.
+set number                  " 显示行号
+set cursorline              " 突出显示当前行
+set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
+set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
+set tabstop=4               " 设定 tab 长度为 4
+set expandtab
+set nobackup                " 覆盖文件时不备份
+set autochdir               " 自动切换当前目录为当前文件所在的目录
+filetype plugin indent on   " 开启插件
+set backupcopy=yes          " 设置备份时的行为为覆盖
+set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
+set nowrapscan              " 禁止在搜索到文件两端时重新搜索
+set incsearch               " 输入搜索内容时就显示搜索结果
+" set hlsearch                " 搜索时高亮显示被找到的文本
+set noerrorbells            " 关闭错误信息响铃
+set novisualbell            " 关闭使用可视响铃代替呼叫
+set t_vb=                   " 置空错误铃声的终端代码
+set magic                   " 设置魔术
+set hidden                  " 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
+set guioptions-=T           " 隐藏工具栏
+set guioptions-=m           " 隐藏菜单栏
+set smartindent             " 开启新行时使用智能自动缩进
+set backspace=indent,eol,start
+                                " 不设定在插入状态无法用退格键和 Delete 键删除回车符
+set foldenable              " 开始折叠
+set foldmethod=marker       " 设置语法折叠
+set foldcolumn=0            " 设置折叠区域的宽度
+setlocal foldlevel=1        " 设置折叠层数为
+set splitbelow
+set splitright
+
+
+" For Mac, copy current line to system clipboard
+" We don't need map paste in VIM, because we just use this for paste content
+" from vim to external program.
+map <F2> :.w !pbcopy<CR><CR>
+inoremap jk <esc>
+noremap <Leader>< <esc>:res +10<CR>
+noremap <Leader>> <esc>:res +10<CR>
+
+" return OS type, eg: windows, or linux, mac, et.st..
+function! MySys()
+    if has("win16") || has("win32") || has("win64") || has("win95")
+        return "windows"
+    elseif has("unix")
+        return "linux"
+    endif
+endfunction
+
+" 用户目录变量$VIMFILES
+if MySys() == "windows"
+    let $VIMFILES = $VIM.'/vimfiles'
+    let $VIMCONF  = '_vimrc'
+elseif MySys() == "linux"
+    let $VIMFILES = $HOME.'/.vim'
+    let $VIMCONF  = '.vimrc'
+endif
+
+" 设定doc文档目录
+let helptags=$VIMFILES.'/doc'
+
+" 设置字体 以及中文支持
+if has("win32")
+    set guifont="Courier New:h12:cANSI"
+endif
+
+" 配置多语言环境
+if has("multi_byte")
+    " UTF-8 编码
+    set encoding=utf-8
+    set termencoding=utf-8
+    set formatoptions+=mM
+    set fencs=utf-8,gbk
+
+    if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
+        set ambiwidth=double
+    endif
+
+    if has("win32")
+        source $VIMRUNTIME/delmenu.vim
+        source $VIMRUNTIME/menu.vim
+        language messages zh_CN.utf-8
+    endif
+else
+    echoerr "Sorry, this version of (g)vim was not compiled with +multi_byte"
+endif
+
+
+" 让 Tohtml 产生有 CSS 语法的 html
+" syntax/2html.vim，可以用:runtime! syntax/2html.vim
+let html_use_css=1
+
+" Python 文件的一般设置，比如不要 tab 等
+autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
+autocmd FileType python map <F10> :!python %<CR>
+
+" 选中状态下 Ctrl+c 复制
+vmap <C-c> "+y
+
+" 打开javascript折叠
+let b:javascript_fold=1
+" 打开javascript对dom、html和css的支持
+let javascript_enable_domhtmlcss=1
+" 设置字典 ~/.vim/dict/文件的路径
+autocmd filetype javascript set dictionary=$VIMFILES/dict/javascript.dict
+autocmd filetype css set dictionary=$VIMFILES/dict/css.dict
+autocmd filetype php set dictionary=$VIMFILES/dict/php.dict
+
+let mapleader = ","
+
+"Fast reloading of the .vimrc
+map <silent> <Leader>ss :source $HOME/$VIMCONF<cr>
+"Fast editing of .vimrc
+map <silent> <Leader>ee :e $HOME/$VIMCONF<cr>
+"When .vimrc is edited, reload it
+autocmd! bufwritepost $VIMCONF source $HOME/$VIMCONF
+
+" save the file
+" map <Leader>w :w<cr>
+map ,w :w<cr>
+" quit
+map ,q :q<cr>
+" save and quit
+map ,z ZZ
+
+set fileformats=unix,dos,mac
+nmap <Leader>fd :se fileformat=dos<CR>
+nmap <Leader>fu :se fileformat=unix<CR>
+
+" Buffers操作快捷方式!
+nnoremap <Leader>bn :bnext<CR>
+nnoremap <Leader>bp :bprevious<CR>
+
+" Map navigation splits
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+
+" Now you can see tab as »---, trail, extends, preceds.
+set listchars=eol:¶,tab:»\ ,trail:·,extends:>,precedes:<
+set list
+
+" Toggle folds open/closed by pressing F9.
+" In addition, if you have :set foldmethod=manual, you can visually select
+" some lines, then press F9 to create a fold.
+inoremap <F9> <C-O>za
+nnoremap <F9> za
+onoremap <F9> <C-C>za
+vnoremap <F9> zf
+
+" Map tabs operations
+nnoremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tp :tabprev<CR>
+map <Leader>t1 1gt
+map <Leader>t2 2gt
+map <Leader>t3 3gt
+map <Leader>t4 4gt
+map <Leader>t5 5gt
+map <Leader>t6 6gt
+map <Leader>t7 7gt
+map <Leader>t8 8gt
+map <Leader>t9 9gt
+map <Leader>tnew :tabnew<CR>
+map <Leader>tc :tabclose<CR>
+
+" Stop highlighted text
+nnoremap <Leader><space> :noh<CR>
+
+" For quick jumping to line number
+" nnoremap <CR> G
+
+" To paste from another application:
+" 1. Start insert mode.
+" 2. Press F2 (toggles the 'paste' option on).
+" 3. Use your terminal to paste text from the clipboard.
+" 4. Press F2 (toggles the 'paste' option off).
+" Then the existing indentation of the pasted text will be retained.
+set pastetoggle=<F2>
+set showmode
+
+function! GotoJump()
+  jumps
+  let j = input("Please select your jump: ")
+  if j != ''
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+  endif
+endfunction
+
+nmap <Leader>jj :call GotoJump()<CR>
+
+function! GrepCurrentFile()
+  execute 'vimgrep '.expand('<cword>').' '.expand('%') | :copen | :cc
+endfunction
+" Easily GREP current word in current file.
+nmap <Leader>sc :call GrepCurrentFile()<CR>
+function! GrepRecursionFile()
+  execute 'vimgrep '.expand('<cword>').' '.expand('%').' *.*' | :copen | :cc
+endfunction
+" Easily GREP current word in all recurise file.
+nmap <Leader>sr :call GrepRecursionFile()<CR>
+
+nnoremap [q    :cprev<CR> :norm! zz<CR>
+nnoremap ]q    :cnext<CR> :norm! zz<CR>
+nnoremap [Q    :cfirst<CR> :norm! zz<CR>
+nnoremap ]Q    :clast<CR> :norm! zz<CR>
+
+"-----------------------------------------------------------------
+" plugin - powerline
+"-----------------------------------------------------------------
+let g:airline_powerline_fonts = 1  " Using powerline font
+
+"-----------------------------------------------------------------
+" plugin - sjl/gundo.vim
+"-----------------------------------------------------------------
+nnoremap <F5> :GundoToggle<CR>
+
+"-----------------------------------------------------------------
+" plugin - ctrlp
+" Ctrl+f: will switch between modes
+" Ctrl+k/j: go up/down
+" Ctrl+v/x: open file vertical/horizontal
+" Ctrl+t: open file in a new tab
+" Ctrl+y: create file(including folder) not exist
+" Ctrl+z: mark files
+" Ctrl+o: open all marked files
+" F5: Refresh cache
+" CtrlPMixed: Search in mix mode, including file/buf/MRU
+" CtrlPLine: Search lines
+"-----------------------------------------------------------------
+nnoremap <C-S-p> :CtrlP<CR>
+nnoremap <C-S-t> :CtrlPTag<CR>
+" Sane Ignore For ctrlp
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$|vendor\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system\|tmp$',
+  \ 'file': '\.exe$\|\.so$\|\.dat$|\.a$|\.la$|\.swp$|\.jpg$|\.bmp$|\.gif$|\.ico$|\.png$'
+  \ }
+
+"-----------------------------------------------------------------
+" plugin - NERD_tree.vim 以树状方式浏览系统中的文件和目录
+" :ERDtree 打开NERD_tree         :NERDtreeClose    关闭NERD_tree
+" o 打开关闭文件或者目录         t 在标签页中打开
+" T 在后台标签页中打开           ! 执行此文件
+" p 到上层目录                   P 到根目录
+" K 到第一个节点                 J 到最后一个节点
+" u 打开上层目录                 m 显示文件系统菜单（添加、删除、移动操作）
+" r 递归刷新当前目录             R 递归刷新当前根目录
+"-----------------------------------------------------------------
+" Make it show when vim has a directory.
+if isdirectory(argv(0))
+    bd
+    autocmd vimenter * exe "cd" argv(0)
+    autocmd VimEnter * NERDTree
+endif
+
+" F3 NERDTree 切换
+map <F3> :NERDTreeToggle<CR>
+imap <F3> <ESC>:NERDTreeToggle<CR>
+"-----------------------------------------------------------------
+" plugin - majutsushi/tagbar
+"-----------------------------------------------------------------
+nmap <F8> :TagbarToggle<CR>
+
+"-----------------------------------------------------------------
+" plugin - scrooloose/syntastic
+"-----------------------------------------------------------------
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"-----------------------------------------------------------------
+" plugin - buffergator.vim Buffers切换
+" \bs 上下方式查看
+" ps split vertically
+" pi split horizonlly
+" po open in place
+"-----------------------------------------------------------------
+nnoremap <silent> <Leader>bs :BuffergatorOpen<CR>
+nnoremap <silent> <Leader>bc :BuffergatorClose<CR>
+
+"-----------------------------------------------------------------
+" plugin - NERD_commenter.vim   注释代码用的，
+" [count],cc 光标以下count行逐行添加注释(7,cc)
+" [count],cu 光标以下count行逐行取消注释(7,cu)
+" [count],cm 光标以下count行尝试添加块注释(7,cm)
+" ,cA 在行尾插入 /* */,并且进入插入模式。 这个命令方便写注释。
+" 注：count参数可选，无则默认为选中行或当前行
+"-----------------------------------------------------------------
+let NERDSpaceDelims=1       " 让注释符与语句之间留一个空格
+let NERDCompactSexyComs=1   " 多行注释时样子更好看
+
+"-----------------------------------------------------------------
+" plugin - DoxygenToolkit.vim  由注释生成文档，并且能够快速生成函数标准注释
+"-----------------------------------------------------------------
+let g:DoxygenToolkit_authorName="Asins - asinsimple AT gmail DOT com"
+let g:DoxygenToolkit_briefTag_funcName="yes"
+map <Leader>df :Dox<CR>
+map <Leader>db :DoxBlock<CR>
+map <Leader>dc a /*  */<LEFT><LEFT><LEFT>
+
+"-----------------------------------------------------------------
+" plugin - Conque
+"-----------------------------------------------------------------
+let g:ConqueTerm_StartMessages = 0
+nnoremap <Leader>ba     :ConqueTermSplit bash<CR>
+nnoremap <Leader>bah    :ConqueTermSplit bash<CR>
+nnoremap <Leader>bav    :ConqueTermVSplit bash<CR>
+
+"-----------------------------------------------------------------
+" plugin - UltiSnips
+"-----------------------------------------------------------------
+let g:UltiSnipsExpandTrigger="<c-j>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+"-----------------------------------------------------------------
+" plugin - Shougo/neocomplete.vim
+"-----------------------------------------------------------------
+"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+"-----------------------------------------------------------------
+" plugin - easymotion
+" Integration with incsearch.vim
+"-----------------------------------------------------------------
+let g:EasyMotion_enter_jump_first = 1
+let g:EasyMotion_space_jump_first = 1
+let g:EasyMotion_disable_two_key_combo = 0
+map  <Leader>f <Plug>(easymotion-bd-f)
+
+"-----------------------------------------------------------------
+" plugin - incsearch
+" We don't need set basic usage here, because above easymotion
+" already integrated it.
+"-----------------------------------------------------------------
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+" Automatic nohlsearch
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
+
+"-----------------------------------------------------------------
+" plugin - incsearch-fuzzy
+"-----------------------------------------------------------------
+" Use fuzzy & fuzzyspell feature both
+function! s:config_fuzzyall(...) abort
+  return extend(copy({
+  \   'converters': [
+  \     incsearch#config#fuzzy#converter(),
+  \     incsearch#config#fuzzyspell#converter()
+  \   ],
+  \ }), get(a:, 1, {}))
+endfunction
+
+noremap <silent><expr> z/ incsearch#go(<SID>config_fuzzyall())
+noremap <silent><expr> z? incsearch#go(<SID>config_fuzzyall({'command': '?'}))
+noremap <silent><expr> zg? incsearch#go(<SID>config_fuzzyall({'is_stay': 1}))
+
+"-----------------------------------------------------------------
+" plugin - incsearch-easymotion
+"-----------------------------------------------------------------
+function! s:config_easyfuzzymotion(...) abort
+  return extend(copy({
+  \   'converters': [incsearch#config#fuzzy#converter()],
+  \   'modules': [incsearch#config#easymotion#module()],
+  \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+  \   'is_expr': 0,
+  \   'is_stay': 1
+  \ }), get(a:, 1, {}))
+endfunction
+
+noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
+
+"-----------------------------------------------------------------
+" plugin - vim-easygrep
+"-----------------------------------------------------------------
+" <Leader>vv  - Grep for the word under the cursor, match all occurences,
+"              like 'g*'.  See ":help gstar".
+"<Leader>vV  - Grep for the word under the cursor, match whole word, like
+"              '*'.  See ":help star".
+"<Leader>va  - Like vv, but add to existing list.
+"<Leader>vA  - Like vV, but add to existing list.
+
+"<Leader>vr  - Perform a global search on the word under the cursor
+"              and prompt for a pattern with which to replace it.
+"<Leader>vR  - Like vr, but match whole word.
+
+
+"-----------------------------------------------------------------
+" plugin - ctrlp-funky
+"-----------------------------------------------------------------
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
