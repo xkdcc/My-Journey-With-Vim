@@ -34,7 +34,6 @@ call vundle#begin()
     Plugin 'Valloric/YouCompleteMe'
     Plugin 'SirVer/ultisnips'
     Plugin 'davidhalter/jedi-vim'
-    Plugin 'mfukar/robotframework-vim'
 
 
     " All of your Plugins must be added before the following line
@@ -68,7 +67,7 @@ colorscheme molokai         " 设定配色方案
 highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
 " this must be after colorscheme if the default highlight color is not you want.
 set number                  " 显示行号
-" set cursorline              " 突出显示当前行
+" set cursorline            " 突出显示当前行, this will make VIM very slow, comment it out
 set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
 set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
 set tabstop=4               " 设定 tab 长度为 4
@@ -346,7 +345,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-core.jar'
+" let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-core.jar' " Please update correspondingly
 
 "-----------------------------------------------------------------
 " plugin - buffergator.vim Buffers切换
