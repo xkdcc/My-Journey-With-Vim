@@ -33,6 +33,8 @@ call vundle#begin()
     Plugin 'honza/vim-snippets'
     Plugin 'Valloric/YouCompleteMe'
     Plugin 'SirVer/ultisnips'
+    Plugin 'davidhalter/jedi-vim'
+    Plugin 'mfukar/robotframework-vim'
 
 
     " All of your Plugins must be added before the following line
@@ -50,11 +52,13 @@ call vundle#begin()
     " see :h vundle for more details or wiki for FAQ
     " Put your non-Plugin stuff after this line
 
+
+
 "-----------------------------------------------------------------
 " General Settings
 "-----------------------------------------------------------------
 source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
+" source $VIMRUNTIME/mswin.vim
 set mouse=v
 syntax on                   " 自动语法高亮
 set cc=80                   " 设置 80 column 高亮
@@ -64,7 +68,7 @@ colorscheme molokai         " 设定配色方案
 highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
 " this must be after colorscheme if the default highlight color is not you want.
 set number                  " 显示行号
-set cursorline              " 突出显示当前行
+" set cursorline              " 突出显示当前行
 set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
 set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
 set tabstop=4               " 设定 tab 长度为 4
@@ -342,6 +346,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-core.jar'
 
 "-----------------------------------------------------------------
 " plugin - buffergator.vim Buffers切换
@@ -407,8 +412,9 @@ map  <Leader>f <Plug>(easymotion-bd-f)
 " plugin - incsearch
 " We don't need set basic usage here, because above easymotion
 " already integrated it.
+" Brant: Comment out "map /", because it will invalid C-v for pasting to /
 "-----------------------------------------------------------------
-map /  <Plug>(incsearch-forward)
+" map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 " Automatic nohlsearch
@@ -470,6 +476,16 @@ noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 "-----------------------------------------------------------------
 " plugin - ctrlp-funky
 "-----------------------------------------------------------------
-nnoremap <Leader>fu :CtrlPFunky<Cr>
-" narrow the list down with a word under cursor
+nnoremap <Leader>fu :CtrlPFunky<Cr> " narrow the list down with a word under cursor
 nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+
+
+"-----------------------------------------------------------------
+" plugin - jedi-vim·
+"-----------------------------------------------------------------
+let g:jedi#goto_command="<leader>d"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
