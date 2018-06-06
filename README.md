@@ -1,2 +1,2 @@
 # vim-related
-Put all of my VIM stuff here.
+Basically, just put my diffirent vimrc here.
