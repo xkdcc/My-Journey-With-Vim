@@ -31,8 +31,10 @@ call vundle#begin()
     Plugin 'haya14busa/incsearch-easymotion.vim'
     Plugin 'dkprice/vim-easygrep'
     Plugin 'honza/vim-snippets'
-    Plugin 'Shougo/neocomplete'
-    Plugin 'SirVer/ultisnips'
+    Plugin 'davidhalter/jedi-vim'
+    Plugin 'Shougo/neocomplete.vim'
+    Plugin 'Shougo/neosnippet'
+    Plugin 'xkdcc/Session-Viminfo-Management'
 
 
     " All of your Plugins must be added before the following line
@@ -66,13 +68,13 @@ colorscheme molokai         " 设定配色方案
 highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
 " this must be after colorscheme if the default highlight color is not you want.
 set number                  " 显示行号
-set cursorline              " 突出显示当前行
+" set cursorline              " 突出显示当前行
 set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
 set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
 set tabstop=4               " 设定 tab 长度为 4
 set expandtab
 set nobackup                " 覆盖文件时不备份
-set autochdir               " 自动切换当前目录为当前文件所在的目录
+" set autochdir               " 自动切换当前目录为当前文件所在的目录
 filetype plugin indent on   " 开启插件
 set backupcopy=yes          " 设置备份时的行为为覆盖
 set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
@@ -96,13 +98,12 @@ setlocal foldlevel=1        " 设置折叠层数为
 set splitbelow
 set splitright
 
-
 " For Mac, copy current line to system clipboard
 " We don't need map paste in VIM, because we just use this for paste content
 " from vim to external program.
 map <F2> :.w !pbcopy<CR><CR>
 inoremap jk <esc>
-noremap <Leader>< <esc>:res +10<CR>
+noremap <Leader>< <esc>:res -10<CR>
 noremap <Leader>> <esc>:res +10<CR>
 
 " return OS type, eg: windows, or linux, mac, et.st..
@@ -174,6 +175,9 @@ autocmd filetype css set dictionary=$VIMFILES/dict/css.dict
 autocmd filetype php set dictionary=$VIMFILES/dict/php.dict
 
 let mapleader = ","
+
+" This is an alternative map for autochdir.
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 "Fast reloading of the .vimrc
 map <silent> <Leader>ss :source $HOME/$VIMCONF<cr>
@@ -330,6 +334,11 @@ endif
 " F3 NERDTree 切换
 map <F3> :NERDTreeToggle<CR>
 imap <F3> <ESC>:NERDTreeToggle<CR>
+" With below settings, ctrlp will sync up if change root dir in NerdTree.
+let g:NERDTreeChDirMode       = 2
+let g:ctrlp_working_path_mode = 'a'
+let NERDTreeShowBookmarks=1
+
 "-----------------------------------------------------------------
 " plugin - majutsushi/tagbar
 "-----------------------------------------------------------------
@@ -385,67 +394,15 @@ nnoremap <Leader>bah    :ConqueTermSplit bash<CR>
 nnoremap <Leader>bav    :ConqueTermVSplit bash<CR>
 
 "-----------------------------------------------------------------
-" plugin - UltiSnips
+" plugin - jedi-vim
 "-----------------------------------------------------------------
-let g:UltiSnipsExpandTrigger="<c-j>"
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-"-----------------------------------------------------------------
-" plugin - Shougo/neocomplete.vim
-"-----------------------------------------------------------------
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
 
 "-----------------------------------------------------------------
 " plugin - easymotion
@@ -526,3 +483,91 @@ noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 nnoremap <Leader>fu :CtrlPFunky<Cr>
 " narrow the list down with a word under cursor
 nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+
+"-----------------------------------------------------------------
+" plugin - neosnippet
+"-----------------------------------------------------------------
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+" Default snippets files are available in: neosnippet-snippets
+" Installing default snippets is optional. If choose not to install them, you
+" must deactivate them with disable_runtime_snippets.
+" which disables all runtime snippets
+let g:neosnippet#disable_runtime_snippets = {
+\   '_' : 1,
+\ }
+
+let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+
+"-----------------------------------------------------------------
+" plugin - Shougo/neocomplete.vim
+"-----------------------------------------------------------------
+"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 1
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
