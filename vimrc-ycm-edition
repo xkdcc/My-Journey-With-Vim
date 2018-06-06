@@ -34,6 +34,8 @@ call vundle#begin()
     Plugin 'Valloric/YouCompleteMe'
     Plugin 'SirVer/ultisnips'
     Plugin 'davidhalter/jedi-vim'
+    Plugin 'mfukar/robotframework-vim'
+    Plugin 'xkdcc/Session-Viminfo-Management'
 
 
     " All of your Plugins must be added before the following line
@@ -59,22 +61,22 @@ call vundle#begin()
 source $VIMRUNTIME/vimrc_example.vim
 " source $VIMRUNTIME/mswin.vim
 set mouse=v
-syntax on                   " 自动语法高亮
+syntax on
 set cc=80                   " 设置 80 column 高亮
 filetype on
 filetype plugin on
-colorscheme molokai         " 设定配色方案
+colorscheme molokai
 highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
 " this must be after colorscheme if the default highlight color is not you want.
-set number                  " 显示行号
-" set cursorline            " 突出显示当前行, this will make VIM very slow, comment it out
+set number                  " set line number
+" set cursorline              " Don't recommend this settings, it would slow down VIM performance
 set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
 set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
 set tabstop=4               " 设定 tab 长度为 4
 set expandtab
 set nobackup                " 覆盖文件时不备份
-set autochdir               " 自动切换当前目录为当前文件所在的目录
-filetype plugin indent on   " 开启插件
+" set autochdir               " 自动切换当前目录为当前文件所在的目录
+filetype plugin indent on
 set backupcopy=yes          " 设置备份时的行为为覆盖
 set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
 set nowrapscan              " 禁止在搜索到文件两端时重新搜索
@@ -104,6 +106,8 @@ map <F2> :.w !pbcopy<CR><CR>
 inoremap jk <esc>
 noremap <Leader>< <esc>:res -10<CR>
 noremap <Leader>> <esc>:res +10<CR>
+" With clipboard, then you can copy yy/dd from VIM clipboard to your system clipboard
+set clipboard=unnamed
 
 " return OS type, eg: windows, or linux, mac, et.st..
 function! MySys()
@@ -157,8 +161,9 @@ endif
 " syntax/2html.vim，可以用:runtime! syntax/2html.vim
 let html_use_css=1
 
-" Python 文件的一般设置，比如不要 tab 等
-autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
+" Python 文件的一般设置，比如不要 tab 
+" With foldmethod=indent, you can use za to fold/unfold python functions
+autocmd FileType python set tabstop=4 shiftwidth=4 expandtab foldmethod=indent foldlevel=99
 autocmd FileType python map <F10> :!python %<CR>
 
 " 选中状态下 Ctrl+c 复制
@@ -174,6 +179,9 @@ autocmd filetype css set dictionary=$VIMFILES/dict/css.dict
 autocmd filetype php set dictionary=$VIMFILES/dict/php.dict
 
 let mapleader = ","
+
+" This is an alternative map for autochdir.
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 "Fast reloading of the .vimrc
 map <silent> <Leader>ss :source $HOME/$VIMCONF<cr>
@@ -330,6 +338,11 @@ endif
 " F3 NERDTree 切换
 map <F3> :NERDTreeToggle<CR>
 imap <F3> <ESC>:NERDTreeToggle<CR>
+" With below settings, ctrlp will sync up if change root dir in NerdTree.
+let g:NERDTreeChDirMode       = 2
+let g:ctrlp_working_path_mode = 'a'
+let NERDTreeShowBookmarks=1
+
 "-----------------------------------------------------------------
 " plugin - majutsushi/tagbar
 "-----------------------------------------------------------------
@@ -345,7 +358,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-" let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-core.jar' " Please update correspondingly
+let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-core.jar'
 
 "-----------------------------------------------------------------
 " plugin - buffergator.vim Buffers切换
