@@ -36,6 +36,9 @@ call vundle#begin()
     Plugin 'davidhalter/jedi-vim'
     Plugin 'mfukar/robotframework-vim'
     Plugin 'xkdcc/Session-Viminfo-Management'
+    Plugin 'ryanoasis/vim-devicons'
+    Plugin 'Raimondi/delimitMate'
+    Plugin 'yuttie/comfortable-motion.vim'
 
 
     " All of your Plugins must be added before the following line
@@ -61,8 +64,8 @@ call vundle#begin()
 source $VIMRUNTIME/vimrc_example.vim
 " source $VIMRUNTIME/mswin.vim
 set mouse=v
-syntax on
-set cc=80                   " 设置 80 column 高亮
+syntax on                   " 自动语法高亮
+" set cc=80                   " 设置 80 column 高亮
 filetype on
 filetype plugin on
 colorscheme molokai
@@ -287,6 +290,12 @@ nnoremap ]q    :cnext<CR> :norm! zz<CR>
 nnoremap [Q    :cfirst<CR> :norm! zz<CR>
 nnoremap ]Q    :clast<CR> :norm! zz<CR>
 
+" Shortcuts for resizing slit windows
+nnoremap <silent> <Leader>+ :resize +5 <CR>
+nnoremap <silent> <Leader>- :resize -5 <CR>
+nnoremap <silent> <Leader><Right> :vertical resize +5 <CR>
+nnoremap <silent> <Leader><Left> :vertical resize -5 <CR>
+
 "-----------------------------------------------------------------
 " plugin - powerline
 "-----------------------------------------------------------------
@@ -359,6 +368,8 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-core.jar'
+" Don't want to enable syntastic for python script automatically
+let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
 
 "-----------------------------------------------------------------
 " plugin - buffergator.vim Buffers切换
