@@ -340,7 +340,7 @@ if isdirectory(argv(0))
     autocmd VimEnter * NERDTree
 endif
 
-" F3 NERDTree 切换
+" F3 NERDTree
 map <F3> :NERDTreeToggle<CR>
 imap <F3> <ESC>:NERDTreeToggle<CR>
 " With below settings, ctrlp will sync up if change root dir in NerdTree.
