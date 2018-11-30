@@ -95,7 +95,7 @@ set guioptions-=m           " 隐藏菜单栏
 set smartindent             " 开启新行时使用智能自动缩进
 set backspace=indent,eol,start
                                 " 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set foldenable              " 开始折叠
+set foldenable
 set foldmethod=marker       " 设置语法折叠
 set foldcolumn=0            " 设置折叠区域的宽度
 setlocal foldlevel=1        " 设置折叠层数为
@@ -121,7 +121,7 @@ function! MySys()
     endif
 endfunction
 
-" 用户目录变量$VIMFILES
+" Set the location of $VIMFILES on different OS
 if MySys() == "windows"
     let $VIMFILES = $VIM.'/vimfiles'
     let $VIMCONF  = '_vimrc'
@@ -130,17 +130,17 @@ elseif MySys() == "linux"
     let $VIMCONF  = '.vimrc'
 endif
 
-" 设定doc文档目录
+" Set help doc path
 let helptags=$VIMFILES.'/doc'
 
-" 设置字体 以及中文支持
+" Set font
 if has("win32")
     set guifont="Courier New:h12:cANSI"
 endif
 
-" 配置多语言环境
+" Settings for multi_byte environment
 if has("multi_byte")
-    " UTF-8 编码
+    " UTF-8
     set encoding=utf-8
     set termencoding=utf-8
     set formatoptions+=mM
@@ -160,23 +160,19 @@ else
 endif
 
 
-" 让 Tohtml 产生有 CSS 语法的 html
-" syntax/2html.vim，可以用:runtime! syntax/2html.vim
+" Enable CSS for Tohtml
+" syntax/2html.vim:runtime! syntax/2html.vim
 let html_use_css=1
 
-" Python 文件的一般设置，比如不要 tab 
+" Settings for Python, for example, no tab 
 " With foldmethod=indent, you can use za to fold/unfold python functions
 autocmd FileType python set tabstop=4 shiftwidth=4 expandtab foldmethod=indent foldlevel=99
 autocmd FileType python map <F10> :!python %<CR>
 
-" 选中状态下 Ctrl+c 复制
+" Ctrl+c to copy in Visual mode and selected something
 vmap <C-c> "+y
 
-" 打开javascript折叠
-let b:javascript_fold=1
-" 打开javascript对dom、html和css的支持
-let javascript_enable_domhtmlcss=1
-" 设置字典 ~/.vim/dict/文件的路径
+" Set dict path
 autocmd filetype javascript set dictionary=$VIMFILES/dict/javascript.dict
 autocmd filetype css set dictionary=$VIMFILES/dict/css.dict
 autocmd filetype php set dictionary=$VIMFILES/dict/php.dict
@@ -205,7 +201,7 @@ set fileformats=unix,dos,mac
 nmap <Leader>fd :se fileformat=dos<CR>
 nmap <Leader>fu :se fileformat=unix<CR>
 
-" Buffers操作快捷方式!
+" Shortcuts for buffers
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprevious<CR>
 
