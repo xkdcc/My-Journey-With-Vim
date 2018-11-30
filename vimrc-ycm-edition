@@ -81,24 +81,24 @@ set nobackup                " Not make a backup if overwriting a file
 " set autochdir             " When on, Vim will change the current working directory whenever you open a file, switch buffers, delete a buffer or open/close a window.
                             " When this option is on some plugins may not work.
 filetype plugin indent on
-set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
-set nowrapscan              " 禁止在搜索到文件两端时重新搜索
-set incsearch               " 输入搜索内容时就显示搜索结果
-" set hlsearch                " 搜索时高亮显示被找到的文本
-set noerrorbells            " 关闭错误信息响铃
-set novisualbell            " 关闭使用可视响铃代替呼叫
-set t_vb=                   " 置空错误铃声的终端代码
-set magic                   " 设置魔术
-set hidden                  " 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set guioptions-=T           " 隐藏工具栏
-set guioptions-=m           " 隐藏菜单栏
-set smartindent             " 开启新行时使用智能自动缩进
-set backspace=indent,eol,start
-                                " 不设定在插入状态无法用退格键和 Delete 键删除回车符
+set ignorecase smartcase
+set nowrapscan              " Searches wrap around the end of the file.
+set incsearch               " While typing a search command, show where the pattern, as it was typed so far, matches.
+" set hlsearch                " When there is a previous search pattern, highlight all its matches. I comment it out as performance concerns
+set noerrorbells            " Disavble ring the bell (beep or screen flash) for error messages.
+set visualbell              " Disable visual bell
+set t_vb=                   " Set visual bell
+set magic                   " 
+set hidden                  " When off a buffer is unloaded when it is abandoned.
+                            " When on a buffer becomes hidden when it is abandoned.
+set guioptions-=T           " Hide tearoff menu items in GUI version of Vim
+set guioptions-=m           " Hide menu in GUI version of Vim
+set smartindent             " Do smart autoindenting when starting a new line
+set backspace=indent,eol,start " 
 set foldenable
-set foldmethod=marker       " 设置语法折叠
-set foldcolumn=0            " 设置折叠区域的宽度
-setlocal foldlevel=1        " 设置折叠层数为
+set foldmethod=marker       " Markers are used to specify folds.
+set foldcolumn=0            " a column with the specified width is shown at the side of the window which indicates open and closed folds.
+setlocal foldlevel=1        " foldlevel of line
 set splitbelow
 set splitright
 
@@ -324,14 +324,14 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 "-----------------------------------------------------------------
-" plugin - NERD_tree.vim 以树状方式浏览系统中的文件和目录
-" :ERDtree 打开NERD_tree         :NERDtreeClose    关闭NERD_tree
-" o 打开关闭文件或者目录         t 在标签页中打开
-" T 在后台标签页中打开           ! 执行此文件
-" p 到上层目录                   P 到根目录
-" K 到第一个节点                 J 到最后一个节点
-" u 打开上层目录                 m 显示文件系统菜单（添加、删除、移动操作）
-" r 递归刷新当前目录             R 递归刷新当前根目录
+" plugin - NERD_tree.vim
+" :ERDtree Open NERD_tree         :NERDtreeClose   Close NERD_tree
+" o open                        t open in tab
+" T open in background tab      ! execute the selected file
+" p upper level                 P go to root node
+" K goto first node             J goto last node
+" u open upper level            m display menu
+" r refresh current folder recursively  R refresh root folder recursively 
 "-----------------------------------------------------------------
 " Make it show when vim has a directory.
 if isdirectory(argv(0))
@@ -368,8 +368,7 @@ let g:syntastic_java_javac_classpath = '~/brant/mac_brant_tools/libs/jar/javaxt-
 let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
 
 "-----------------------------------------------------------------
-" plugin - buffergator.vim Buffers切换
-" \bs 上下方式查看
+" plugin - buffergator.vim
 " ps split vertically
 " pi split horizonlly
 " po open in place
@@ -378,18 +377,17 @@ nnoremap <silent> <Leader>bs :BuffergatorOpen<CR>
 nnoremap <silent> <Leader>bc :BuffergatorClose<CR>
 
 "-----------------------------------------------------------------
-" plugin - NERD_commenter.vim   注释代码用的，
-" [count],cc 光标以下count行逐行添加注释(7,cc)
-" [count],cu 光标以下count行逐行取消注释(7,cu)
-" [count],cm 光标以下count行尝试添加块注释(7,cm)
-" ,cA 在行尾插入 /* */,并且进入插入模式。 这个命令方便写注释。
-" 注：count参数可选，无则默认为选中行或当前行
+" plugin - NERD_commenter.vim
+" [count],cc comment out the [count] line(s) from cursor line in visual mode
+" [count],cu uncomment out the [count] line(s) from cursor line in visual mode
+" [count],cm Comments the given lines using only one set of multipart delimiters.
+" ,cA Adds comment delimiters to the end of line and goes into insert mode between them.
 "-----------------------------------------------------------------
-let NERDSpaceDelims=1       " 让注释符与语句之间留一个空格
-let NERDCompactSexyComs=1   " 多行注释时样子更好看
+let NERDSpaceDelims=1       " Add spaces after comment delimiters by default
+let NERDCompactSexyComs=1   " Use compact syntax for prettified multi-line comments
 
 "-----------------------------------------------------------------
-" plugin - DoxygenToolkit.vim  由注释生成文档，并且能够快速生成函数标准注释
+" plugin - DoxygenToolkit.vim
 "-----------------------------------------------------------------
 let g:DoxygenToolkit_authorName="Asins - asinsimple AT gmail DOT com"
 let g:DoxygenToolkit_briefTag_funcName="yes"
