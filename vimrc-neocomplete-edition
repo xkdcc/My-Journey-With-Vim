@@ -60,41 +60,41 @@ call vundle#begin()
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 set mouse=v
-syntax on                   " 自动语法高亮
-set cc=80                   " 设置 80 column 高亮
+syntax on                   " Syntax hilighting
 filetype on
 filetype plugin on
-colorscheme molokai         " 设定配色方案
-highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
-" this must be after colorscheme if the default highlight color is not you want.
-set number                  " 显示行号
-" set cursorline              " 突出显示当前行
-set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
-set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
-set tabstop=4               " 设定 tab 长度为 4
+colorscheme molokai
+" set cc=80                 " Set 80th column highlight
+" highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " Set the color of 80th colmnn which has been highlighted
+                            " this must be after colorscheme if the default highlight color is not you want.
+set number                  " set line number
+" set cursorline            " Don't recommend this settings, it would slow down VIM performance
+set shiftwidth=4            " Set the amount of spaces you want for a deeper level, like in a code block
+set softtabstop=4           " Number of spaces that a <Tab> counts for while performing editing, like inserting a <Tab> or using <BS>
+set tabstop=4               " Number of spaces that a <Tab> in the file counts for
 set expandtab
-set nobackup                " 覆盖文件时不备份
-" set autochdir               " 自动切换当前目录为当前文件所在的目录
-filetype plugin indent on   " 开启插件
-set backupcopy=yes          " 设置备份时的行为为覆盖
-set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
-set nowrapscan              " 禁止在搜索到文件两端时重新搜索
-set incsearch               " 输入搜索内容时就显示搜索结果
-" set hlsearch                " 搜索时高亮显示被找到的文本
-set noerrorbells            " 关闭错误信息响铃
-set novisualbell            " 关闭使用可视响铃代替呼叫
-set t_vb=                   " 置空错误铃声的终端代码
-set magic                   " 设置魔术
-set hidden                  " 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set guioptions-=T           " 隐藏工具栏
-set guioptions-=m           " 隐藏菜单栏
-set smartindent             " 开启新行时使用智能自动缩进
-set backspace=indent,eol,start
-                                " 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set foldenable              " 开始折叠
-set foldmethod=marker       " 设置语法折叠
-set foldcolumn=0            " 设置折叠区域的宽度
-setlocal foldlevel=1        " 设置折叠层数为
+set nobackup                " Not make a backup if overwriting a file
+" set autochdir             " When on, Vim will change the current working directory whenever you open a file, switch buffers, delete a buffer or open/close a window.
+                            " When this option is on some plugins may not work.
+filetype plugin indent on
+set ignorecase smartcase
+set nowrapscan              " Searches wrap around the end of the file.
+set incsearch               " While typing a search command, show where the pattern, as it was typed so far, matches.
+" set hlsearch                " When there is a previous search pattern, highlight all its matches. I comment it out as performance concerns
+set noerrorbells            " Disavble ring the bell (beep or screen flash) for error messages.
+set visualbell              " Disable visual bell
+set t_vb=                   " Set visual bell
+set magic                   " 
+set hidden                  " When off a buffer is unloaded when it is abandoned.
+                            " When on a buffer becomes hidden when it is abandoned.
+set guioptions-=T           " Hide tearoff menu items in GUI version of Vim
+set guioptions-=m           " Hide menu in GUI version of Vim
+set smartindent             " Do smart autoindenting when starting a new line
+set backspace=indent,eol,start " 
+set foldenable
+set foldmethod=marker       " Markers are used to specify folds.
+set foldcolumn=0            " a column with the specified width is shown at the side of the window which indicates open and closed folds.
+setlocal foldlevel=1 " foldlevel of line
 set splitbelow
 set splitright
 
@@ -115,7 +115,7 @@ function! MySys()
     endif
 endfunction
 
-" 用户目录变量$VIMFILES
+" Set the location of $VIMFILES on different OS
 if MySys() == "windows"
     let $VIMFILES = $VIM.'/vimfiles'
     let $VIMCONF  = '_vimrc'
@@ -124,17 +124,17 @@ elseif MySys() == "linux"
     let $VIMCONF  = '.vimrc'
 endif
 
-" 设定doc文档目录
+" Set help doc path
 let helptags=$VIMFILES.'/doc'
 
-" 设置字体 以及中文支持
+" Set font
 if has("win32")
     set guifont="Courier New:h12:cANSI"
 endif
 
-" 配置多语言环境
+" Settings for multi_byte environment
 if has("multi_byte")
-    " UTF-8 编码
+    " UTF-8
     set encoding=utf-8
     set termencoding=utf-8
     set formatoptions+=mM
@@ -154,22 +154,19 @@ else
 endif
 
 
-" 让 Tohtml 产生有 CSS 语法的 html
+" Enable CSS for Tohtml
 " syntax/2html.vim，可以用:runtime! syntax/2html.vim
 let html_use_css=1
 
-" Python 文件的一般设置，比如不要 tab 等
+" Settings for Python, for example, no tab 
+" With foldmethod=indent, you can use za to fold/unfold python functions
 autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
 autocmd FileType python map <F10> :!python %<CR>
 
-" 选中状态下 Ctrl+c 复制
+" Ctrl+c to copy in Visual mode and selected something
 vmap <C-c> "+y
 
-" 打开javascript折叠
-let b:javascript_fold=1
-" 打开javascript对dom、html和css的支持
-let javascript_enable_domhtmlcss=1
-" 设置字典 ~/.vim/dict/文件的路径
+" Set dict path
 autocmd filetype javascript set dictionary=$VIMFILES/dict/javascript.dict
 autocmd filetype css set dictionary=$VIMFILES/dict/css.dict
 autocmd filetype php set dictionary=$VIMFILES/dict/php.dict
@@ -198,7 +195,7 @@ set fileformats=unix,dos,mac
 nmap <Leader>fd :se fileformat=dos<CR>
 nmap <Leader>fu :se fileformat=unix<CR>
 
-" Buffers操作快捷方式!
+" Shortcuts for buffers
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprevious<CR>
 
@@ -316,13 +313,13 @@ let g:ctrlp_custom_ignore = {
 
 "-----------------------------------------------------------------
 " plugin - NERD_tree.vim 以树状方式浏览系统中的文件和目录
-" :ERDtree 打开NERD_tree         :NERDtreeClose    关闭NERD_tree
-" o 打开关闭文件或者目录         t 在标签页中打开
-" T 在后台标签页中打开           ! 执行此文件
-" p 到上层目录                   P 到根目录
-" K 到第一个节点                 J 到最后一个节点
-" u 打开上层目录                 m 显示文件系统菜单（添加、删除、移动操作）
-" r 递归刷新当前目录             R 递归刷新当前根目录
+" :ERDtree Open NERD_tree         :NERDtreeClose   Close NERD_tree
+" o open                        t open in tab
+" T open in background tab      ! execute the selected file
+" p upper level                 P go to root node
+" K goto first node             J goto last node
+" u open upper level            m display menu
+" r refresh current folder recursively R refresh root folder recursively 
 "-----------------------------------------------------------------
 " Make it show when vim has a directory.
 if isdirectory(argv(0))
@@ -331,7 +328,7 @@ if isdirectory(argv(0))
     autocmd VimEnter * NERDTree
 endif
 
-" F3 NERDTree 切换
+" F3 NERDTree
 map <F3> :NERDTreeToggle<CR>
 imap <F3> <ESC>:NERDTreeToggle<CR>
 " With below settings, ctrlp will sync up if change root dir in NerdTree.
@@ -357,7 +354,6 @@ let g:syntastic_check_on_wq = 0
 
 "-----------------------------------------------------------------
 " plugin - buffergator.vim Buffers切换
-" \bs 上下方式查看
 " ps split vertically
 " pi split horizonlly
 " po open in place
@@ -366,18 +362,17 @@ nnoremap <silent> <Leader>bs :BuffergatorOpen<CR>
 nnoremap <silent> <Leader>bc :BuffergatorClose<CR>
 
 "-----------------------------------------------------------------
-" plugin - NERD_commenter.vim   注释代码用的，
-" [count],cc 光标以下count行逐行添加注释(7,cc)
-" [count],cu 光标以下count行逐行取消注释(7,cu)
-" [count],cm 光标以下count行尝试添加块注释(7,cm)
-" ,cA 在行尾插入 /* */,并且进入插入模式。 这个命令方便写注释。
-" 注：count参数可选，无则默认为选中行或当前行
+" plugin - NERD_commenter.vim
+" [count],cc comment out the [count] line(s) from cursor line in visual mode
+" [count],cu uncomment out the [count] line(s) from cursor line in visual mode
+" [count],cm Comments the given lines using only one set of multipart delimiters.
+" ,cA Adds comment delimiters to the end of line and goes into insert mode between them.
 "-----------------------------------------------------------------
-let NERDSpaceDelims=1       " 让注释符与语句之间留一个空格
-let NERDCompactSexyComs=1   " 多行注释时样子更好看
+let NERDSpaceDelims=1       " Add spaces after comment delimiters by default
+let NERDCompactSexyComs=1   " Use compact syntax for prettified multi-line comments
 
 "-----------------------------------------------------------------
-" plugin - DoxygenToolkit.vim  由注释生成文档，并且能够快速生成函数标准注释
+" plugin - DoxygenToolkit.vim
 "-----------------------------------------------------------------
 let g:DoxygenToolkit_authorName="Asins - asinsimple AT gmail DOT com"
 let g:DoxygenToolkit_briefTag_funcName="yes"
