@@ -64,23 +64,23 @@ call vundle#begin()
 source $VIMRUNTIME/vimrc_example.vim
 " source $VIMRUNTIME/mswin.vim
 set mouse=v
-syntax on                   " 自动语法高亮
-" set cc=80                   " 设置 80 column 高亮
+syntax on                   " Syntax hilighting
 filetype on
 filetype plugin on
 colorscheme molokai
-highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
-" this must be after colorscheme if the default highlight color is not you want.
+" set cc=80                 " Set 80th column highlight
+" highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " Set the color of 80th colmnn which has been highlighted
+                            " this must be after colorscheme if the default highlight color is not you want.
 set number                  " set line number
-" set cursorline              " Don't recommend this settings, it would slow down VIM performance
-set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
-set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
-set tabstop=4               " 设定 tab 长度为 4
+" set cursorline            " Don't recommend this settings, it would slow down VIM performance
+set shiftwidth=4            " Set the amount of spaces you want for a deeper level, like in a code block
+set softtabstop=4           " Number of spaces that a <Tab> counts for while performing editing, like inserting a <Tab> or using <BS>
+set tabstop=4               " Number of spaces that a <Tab> in the file counts for
 set expandtab
-set nobackup                " 覆盖文件时不备份
-" set autochdir               " 自动切换当前目录为当前文件所在的目录
+set nobackup                " Not make a backup if overwriting a file
+" set autochdir             " When on, Vim will change the current working directory whenever you open a file, switch buffers, delete a buffer or open/close a window.
+                            " When this option is on some plugins may not work.
 filetype plugin indent on
-set backupcopy=yes          " 设置备份时的行为为覆盖
 set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
 set nowrapscan              " 禁止在搜索到文件两端时重新搜索
 set incsearch               " 输入搜索内容时就显示搜索结果
