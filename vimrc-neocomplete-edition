@@ -35,6 +35,8 @@ call vundle#begin()
     Plugin 'Shougo/neocomplete.vim'
     Plugin 'Shougo/neosnippet'
     Plugin 'xkdcc/Session-Viminfo-Management'
+    Plugin 'ryanoasis/vim-devicons'
+    Plugin 'Raimondi/delimitMate'
 
 
     " All of your Plugins must be added before the following line
