@@ -94,7 +94,7 @@ set backspace=indent,eol,start "
 set foldenable
 set foldmethod=marker       " Markers are used to specify folds.
 set foldcolumn=0            " a column with the specified width is shown at the side of the window which indicates open and closed folds.
-setlocal foldlevel=1 " foldlevel of line
+setlocal foldlevel=1        " foldlevel of line
 set splitbelow
 set splitright
 
@@ -105,6 +105,8 @@ map <F2> :.w !pbcopy<CR><CR>
 inoremap jk <esc>
 noremap <Leader>< <esc>:res -10<CR>
 noremap <Leader>> <esc>:res +10<CR>
+" With clipboard, then you can copy yy/dd from VIM clipboard to your system clipboard
+set clipboard=unnamed
 
 " return OS type, eg: windows, or linux, mac, et.st..
 function! MySys()
@@ -160,7 +162,7 @@ let html_use_css=1
 
 " Settings for Python, for example, no tab 
 " With foldmethod=indent, you can use za to fold/unfold python functions
-autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
+autocmd FileType python set tabstop=4 shiftwidth=4 expandtab foldmethod=indent foldlevel=99
 autocmd FileType python map <F10> :!python %<CR>
 
 " Ctrl+c to copy in Visual mode and selected something
@@ -279,6 +281,12 @@ nnoremap [q    :cprev<CR> :norm! zz<CR>
 nnoremap ]q    :cnext<CR> :norm! zz<CR>
 nnoremap [Q    :cfirst<CR> :norm! zz<CR>
 nnoremap ]Q    :clast<CR> :norm! zz<CR>
+
+" Shortcuts for resizing slit windows
+nnoremap <silent> <Leader>+ :resize +5 <CR>
+nnoremap <silent> <Leader>- :resize -5 <CR>
+nnoremap <silent> <Leader><Right> :vertical resize +5 <CR>
+nnoremap <silent> <Leader><Left> :vertical resize -5 <CR>
 
 "-----------------------------------------------------------------
 " plugin - powerline
