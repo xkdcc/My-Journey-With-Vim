@@ -101,6 +101,7 @@ set foldcolumn=0            " a column with the specified width is shown at the 
 setlocal foldlevel=1        " foldlevel of line
 set splitbelow
 set splitright
+set scrolloff=0
 
 " For Mac, copy current line to system clipboard
 " We don't need map paste in VIM, because we just use this for paste content
@@ -136,6 +137,8 @@ let helptags=$VIMFILES.'/doc'
 " Set font
 if has("win32")
     set guifont="Courier New:h12:cANSI"
+else
+    set guifont="MesloLGMDZ Nerd Font:h12:cANSI"
 endif
 
 " Settings for multi_byte environment
@@ -171,6 +174,9 @@ autocmd FileType python map <F10> :!python %<CR>
 
 " Ctrl+c to copy in Visual mode and selected something
 vmap <C-c> "+y
+
+let b:javascript_fold=1
+let javascript_enable_domhtmlcss=1
 
 " Set dict path
 autocmd filetype javascript set dictionary=$VIMFILES/dict/javascript.dict
@@ -506,3 +512,10 @@ let g:jedi#documentation_command = "K"
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader>r"
+
+"-----------------------------------------------------------------
+" plugin - yuttie/comfortable-motion
+" below settings allows to scroll 35 lines with C-F
+"-----------------------------------------------------------------
+let g:comfortable_motion_friction = 122.0
+let g:comfortable_motion_air_drag = 4.0
