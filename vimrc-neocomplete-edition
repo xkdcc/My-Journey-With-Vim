@@ -61,41 +61,37 @@ call vundle#begin()
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 set mouse=v
-syntax on                   " 自动语法高亮
-set cc=80                   " 设置 80 column 高亮
+syntax on                   " Syntax Highlighting
+set cc=80                   " Line length marker
 filetype on
 filetype plugin on
-colorscheme molokai         " 设定配色方案
-highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " 设置高亮 column 的颜色,
+colorscheme molokai
+highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " Set color of line length marker
 " this must be after colorscheme if the default highlight color is not you want.
-set number                  " 显示行号
-" set cursorline              " 突出显示当前行
-set shiftwidth=4            " 设定 << 和 >> 命令移动时的宽度为 4
-set softtabstop=4           " 使得按退格键时可以一次删掉 4 个空格
-set tabstop=4               " 设定 tab 长度为 4
+set number
+set shiftwidth=4            " I highly recommend you to understand tab/space in Vim
+set softtabstop=4           " by watching this http://vimcasts.org/episodes/tabs-and-spaces/
+set tabstop=4
 set expandtab
-set nobackup                " 覆盖文件时不备份
-" set autochdir               " 自动切换当前目录为当前文件所在的目录
-filetype plugin indent on   " 开启插件
-set backupcopy=yes          " 设置备份时的行为为覆盖
-set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
-set nowrapscan              " 禁止在搜索到文件两端时重新搜索
-set incsearch               " 输入搜索内容时就显示搜索结果
-" set hlsearch                " 搜索时高亮显示被找到的文本
-set noerrorbells            " 关闭错误信息响铃
-set novisualbell            " 关闭使用可视响铃代替呼叫
-set t_vb=                   " 置空错误铃声的终端代码
-set magic                   " 设置魔术
-set hidden                  " 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set guioptions-=T           " 隐藏工具栏
-set guioptions-=m           " 隐藏菜单栏
-set smartindent             " 开启新行时使用智能自动缩进
+set nobackup
+filetype plugin indent on   " turns on "detection", "plugin" and "indent" at once.
+set backupcopy=yes          " make a copy of the file and overwrite the original one when writing a file
+set ignorecase smartcase
+set nowrapscan              " No searches wrap around the end of the file.
+set incsearch
+set noerrorbells
+set novisualbell
+set t_vb=                   " Set visual bell to empty
+set magic
+set hidden                  " When on a buffer becomes hidden when it is abandoned
+set guioptions-=T           " Remove toolbar in GUI mode, like Win32, GTK+, Motif
+set guioptions-=m           " Remove menubar in GUI mode, like Win32, GTK+, Motif
+set smartindent             " Do smart autoindenting when starting a new line.
 set backspace=indent,eol,start
-                                " 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set foldenable              " 开始折叠
-set foldmethod=marker       " 设置语法折叠
-set foldcolumn=0            " 设置折叠区域的宽度
-setlocal foldlevel=1        " 设置折叠层数为
+set foldenable
+set foldmethod=marker       " Markers are used to specify folds.
+set foldcolumn=0
+setlocal foldlevel=1
 set splitbelow
 set splitright
 
@@ -116,7 +112,7 @@ function! MySys()
     endif
 endfunction
 
-" 用户目录变量$VIMFILES
+" User space $VIMFILES
 if MySys() == "windows"
     let $VIMFILES = $VIM.'/vimfiles'
     let $VIMCONF  = '_vimrc'
@@ -125,17 +121,15 @@ elseif MySys() == "linux"
     let $VIMCONF  = '.vimrc'
 endif
 
-" 设定doc文档目录
+" set doc path
 let helptags=$VIMFILES.'/doc'
 
-" 设置字体 以及中文支持
 if has("win32")
     set guifont="Courier New:h12:cANSI"
 endif
 
-" 配置多语言环境
+" Support multi_byte languages, like Chinese
 if has("multi_byte")
-    " UTF-8 编码
     set encoding=utf-8
     set termencoding=utf-8
     set formatoptions+=mM
@@ -155,22 +149,20 @@ else
 endif
 
 
-" 让 Tohtml 产生有 CSS 语法的 html
-" syntax/2html.vim，可以用:runtime! syntax/2html.vim
+" Let Tohtml to generate html with CSS
+" syntax/2html.vim，Usage:runtime! syntax/2html.vim
 let html_use_css=1
 
-" Python 文件的一般设置，比如不要 tab 等
+" Python settings
 autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
 autocmd FileType python map <F10> :!python %<CR>
 
-" 选中状态下 Ctrl+c 复制
+" Support Ctrl+c to copy in Visual selection mode
 vmap <C-c> "+y
 
-" 打开javascript折叠
 let b:javascript_fold=1
-" 打开javascript对dom、html和css的支持
 let javascript_enable_domhtmlcss=1
-" 设置字典 ~/.vim/dict/文件的路径
+
 autocmd filetype javascript set dictionary=$VIMFILES/dict/javascript.dict
 autocmd filetype css set dictionary=$VIMFILES/dict/css.dict
 autocmd filetype php set dictionary=$VIMFILES/dict/php.dict
@@ -199,7 +191,7 @@ set fileformats=unix,dos,mac
 nmap <Leader>fd :se fileformat=dos<CR>
 nmap <Leader>fu :se fileformat=unix<CR>
 
-" Buffers操作快捷方式!
+" Buffers shortcuts
 nnoremap <Leader>bn :bnext<CR>
 nnoremap <Leader>bp :bprevious<CR>
 
@@ -316,14 +308,14 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 "-----------------------------------------------------------------
-" plugin - NERD_tree.vim 以树状方式浏览系统中的文件和目录
-" :ERDtree 打开NERD_tree         :NERDtreeClose    关闭NERD_tree
-" o 打开关闭文件或者目录         t 在标签页中打开
-" T 在后台标签页中打开           ! 执行此文件
-" p 到上层目录                   P 到根目录
-" K 到第一个节点                 J 到最后一个节点
-" u 打开上层目录                 m 显示文件系统菜单（添加、删除、移动操作）
-" r 递归刷新当前目录             R 递归刷新当前根目录
+" plugin - NERD_tree.vim
+" :ERDtree Open NERD_tree         :NERDtreeClose    Close NERD_tree
+" o open folder                 t open in tab
+" T open in tab in background   ! execute file
+" p go to upper folder          P go to root folder
+" K got last node               J go to the end
+" u open upper folder           m display menu of file system
+" r recursive current folder    R recursive current root folder
 "-----------------------------------------------------------------
 " Make it show when vim has a directory.
 if isdirectory(argv(0))
@@ -332,7 +324,7 @@ if isdirectory(argv(0))
     autocmd VimEnter * NERDTree
 endif
 
-" F3 NERDTree 切换
+" F3 NERDTree toggle
 map <F3> :NERDTreeToggle<CR>
 imap <F3> <ESC>:NERDTreeToggle<CR>
 " With below settings, ctrlp will sync up if change root dir in NerdTree.
@@ -357,8 +349,8 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 "-----------------------------------------------------------------
-" plugin - buffergator.vim Buffers切换
-" \bs 上下方式查看
+" plugin - buffergator.vim Buffers switch
+" \bs vertical view
 " ps split vertically
 " pi split horizonlly
 " po open in place
@@ -367,18 +359,17 @@ nnoremap <silent> <Leader>bs :BuffergatorOpen<CR>
 nnoremap <silent> <Leader>bc :BuffergatorClose<CR>
 
 "-----------------------------------------------------------------
-" plugin - NERD_commenter.vim   注释代码用的，
-" [count],cc 光标以下count行逐行添加注释(7,cc)
-" [count],cu 光标以下count行逐行取消注释(7,cu)
-" [count],cm 光标以下count行尝试添加块注释(7,cm)
-" ,cA 在行尾插入 /* */,并且进入插入模式。 这个命令方便写注释。
-" 注：count参数可选，无则默认为选中行或当前行
+" plugin - NERD_commenter.vim
+" [count],cc comment out: (7,cc)
+" [count],cu uncomment out: (7,cu)
+" [count],cm block comment: (7,cm)
+" ,cA Insert /* */ at the end of line and entering insert mode.
 "-----------------------------------------------------------------
-let NERDSpaceDelims=1       " 让注释符与语句之间留一个空格
-let NERDCompactSexyComs=1   " 多行注释时样子更好看
+let NERDSpaceDelims=1
+let NERDCompactSexyComs=1
 
 "-----------------------------------------------------------------
-" plugin - DoxygenToolkit.vim  由注释生成文档，并且能够快速生成函数标准注释
+" plugin - DoxygenToolkit.vim
 "-----------------------------------------------------------------
 let g:DoxygenToolkit_authorName="Asins - asinsimple AT gmail DOT com"
 let g:DoxygenToolkit_briefTag_funcName="yes"
