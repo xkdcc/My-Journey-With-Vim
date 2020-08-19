@@ -44,6 +44,9 @@ call vundle#begin()
     Plugin 'thosakwe/vim-flutter'
     Plugin 'mileszs/ack.vim'
     Plugin 'fatih/vim-go'
+    Plugin 'Yggdroot/indentLine'
+    Plugin 'tpope/vim-surround'
+    Plugin 'AndrewRadev/tagalong.vim
 
     " All of your Plugins must be added before the following line
     call vundle#end()            " required
