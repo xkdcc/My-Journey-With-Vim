@@ -11,6 +11,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required:
     Plugin 'VundleVim/Vundle.vim'
     Plugin 'bling/vim-airline'
+    Plugin 'vim-airline/vim-airline-themes'
     Plugin 'kien/ctrlp.vim'
     Plugin 'tacahiroy/ctrlp-funky'
     Plugin 'bling/vim-bufferline'
@@ -30,9 +31,9 @@ call vundle#begin()
     Plugin 'haya14busa/incsearch-fuzzy.vim'
     Plugin 'haya14busa/incsearch-easymotion.vim'
     Plugin 'dkprice/vim-easygrep'
+    Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets'
     Plugin 'Valloric/YouCompleteMe'
-    Plugin 'SirVer/ultisnips'
     Plugin 'davidhalter/jedi-vim'
     Plugin 'mfukar/robotframework-vim'
     Plugin 'xkdcc/Session-Viminfo-Management'
@@ -41,7 +42,8 @@ call vundle#begin()
     Plugin 'yuttie/comfortable-motion.vim'
     Plugin 'dart-lang/dart-vim-plugin'
     Plugin 'thosakwe/vim-flutter'
-
+    Plugin 'mileszs/ack.vim'
+    Plugin 'fatih/vim-go'
 
     " All of your Plugins must be added before the following line
     call vundle#end()            " required
@@ -67,9 +69,10 @@ source $VIMRUNTIME/vimrc_example.vim
 " source $VIMRUNTIME/mswin.vim
 set mouse=v
 syntax on                   " Syntax hilighting
+" set cc=80
 filetype on
-filetype plugin on
 colorscheme molokai
+filetype plugin on
 " set cc=80                 " Set 80th column highlight
 " highlight ColorColumn ctermbg=LightGrey guibg=DarkGrey " Set the color of 80th colmnn which has been highlighted
                             " this must be after colorscheme if the default highlight color is not you want.
@@ -90,13 +93,13 @@ set incsearch               " While typing a search command, show where the patt
 set noerrorbells            " Disavble ring the bell (beep or screen flash) for error messages.
 set visualbell              " Disable visual bell
 set t_vb=                   " Set visual bell
-set magic                   " 
+set magic                   "
 set hidden                  " When off a buffer is unloaded when it is abandoned.
                             " When on a buffer becomes hidden when it is abandoned.
 set guioptions-=T           " Hide tearoff menu items in GUI version of Vim
 set guioptions-=m           " Hide menu in GUI version of Vim
 set smartindent             " Do smart autoindenting when starting a new line
-set backspace=indent,eol,start " 
+set backspace=indent,eol,start "
 set foldenable
 set foldmethod=marker       " Markers are used to specify folds.
 set foldcolumn=0            " a column with the specified width is shown at the side of the window which indicates open and closed folds.
@@ -169,7 +172,7 @@ endif
 " syntax/2html.vim:runtime! syntax/2html.vim
 let html_use_css=1
 
-" Settings for Python, for example, no tab 
+" Settings for Python, for example, no tab
 " With foldmethod=indent, you can use za to fold/unfold python functions
 autocmd FileType python set tabstop=4 shiftwidth=4 expandtab foldmethod=indent foldlevel=99
 autocmd FileType python map <F10> :!python %<CR>
@@ -301,9 +304,29 @@ nnoremap <silent> <Leader><Right> :vertical resize +5 <CR>
 nnoremap <silent> <Leader><Left> :vertical resize -5 <CR>
 
 "-----------------------------------------------------------------
-" plugin - powerline
+" plugin - vimairline
 "-----------------------------------------------------------------
 let g:airline_powerline_fonts = 1  " Using powerline font
+" enable/disable enhanced tabline.
+let g:airline#extensions#tabline#enabled = 1
+" integrated with syntastic
+let g:airline#extensions#syntastic#enabled = 1
+" integrated with tagbar
+let g:airline#extensions#tagbar#enabled = 1
+" enable/disable showing a summary of changed hunks under source control
+let g:airline#extensions#hunks#enabled = 1
+" enable/disable showing only non-zero hunks.
+let g:airline#extensions#hunks#non_zero_only = 0
+" set hunk count symbols.
+let g:airline#extensions#hunks#hunk_symbols = ['+', '~', '-']
+
+"-----------------------------------------------------------------
+" plugin - vim-airline-themes
+"-----------------------------------------------------------------
+let g:airline_theme="tomorrow"
+" let g:airline_theme="simple"
+" let g:airline_theme="molokai"
+" let g:airline_theme="violet"
 
 "-----------------------------------------------------------------
 " plugin - sjl/gundo.vim
@@ -339,7 +362,7 @@ let g:ctrlp_custom_ignore = {
 " p upper level                 P go to root node
 " K goto first node             J goto last node
 " u open upper level            m display menu
-" r refresh current folder recursively  R refresh root folder recursively 
+" r refresh current folder recursively  R refresh root folder recursively
 "-----------------------------------------------------------------
 " Make it show when vim has a directory.
 if isdirectory(argv(0))
@@ -348,10 +371,9 @@ if isdirectory(argv(0))
     autocmd VimEnter * NERDTree
 endif
 
-" F3 NERDTree
+" F3 NERDTree toggle
 map <F3> :NERDTreeToggle<CR>
 imap <F3> <ESC>:NERDTreeToggle<CR>
-" With below settings, ctrlp will sync up if change root dir in NerdTree.
 let g:NERDTreeChDirMode       = 2
 let g:ctrlp_working_path_mode = 'a'
 let NERDTreeShowBookmarks=1
@@ -377,6 +399,7 @@ let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
 
 "-----------------------------------------------------------------
 " plugin - buffergator.vim
+" \bs 上下方式查看
 " ps split vertically
 " pi split horizonlly
 " po open in place
@@ -391,8 +414,8 @@ nnoremap <silent> <Leader>bc :BuffergatorClose<CR>
 " [count],cm Comments the given lines using only one set of multipart delimiters.
 " ,cA Adds comment delimiters to the end of line and goes into insert mode between them.
 "-----------------------------------------------------------------
-let NERDSpaceDelims=1       " Add spaces after comment delimiters by default
-let NERDCompactSexyComs=1   " Use compact syntax for prettified multi-line comments
+let NERDSpaceDelims=1
+let NERDCompactSexyComs=1
 
 "-----------------------------------------------------------------
 " plugin - DoxygenToolkit.vim
@@ -486,12 +509,13 @@ noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 "-----------------------------------------------------------------
 " plugin - vim-easygrep
 "-----------------------------------------------------------------
-" <Leader>vv  - Grep for the word under the cursor, match all occurences,
+" <Leader>vv - Grep for the word under the cursor, match all occurences,
 "              like 'g*'.  See ":help gstar".
 "<Leader>vV  - Grep for the word under the cursor, match whole word, like
 "              '*'.  See ":help star".
 "<Leader>va  - Like vv, but add to existing list.
 "<Leader>vA  - Like vV, but add to existing list.
+"<Leader>vo  - Display options.
 
 "<Leader>vr  - Perform a global search on the word under the cursor
 "              and prompt for a pattern with which to replace it.
@@ -530,3 +554,18 @@ nnoremap <leader>fq :FlutterQuit<cr>
 nnoremap <leader>fr :FlutterHotReload<cr>
 nnoremap <leader>fR :FlutterHotRestart<cr>
 nnoremap <leader>fD :FlutterVisualDebug<cr>
+
+"-----------------------------------------------------------------
+" plugin - 'mileszs/ack.vim'
+" integrated with https://github.com/ggreer/the_silver_searcher
+"-----------------------------------------------------------------
+" let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+"-----------------------------------------------------------------
+" plugin - 'vim-go'
+"-----------------------------------------------------------------
+" disable using gopls in vim-go, it's annoying.
+let g:go_gopls_enabled = 0
