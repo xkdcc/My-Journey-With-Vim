@@ -46,7 +46,7 @@ call vundle#begin()
     Plugin 'fatih/vim-go'
     Plugin 'Yggdroot/indentLine'
     Plugin 'tpope/vim-surround'
-    Plugin 'AndrewRadev/tagalong.vim
+    Plugin 'AndrewRadev/tagalong.vim'
 
     " All of your Plugins must be added before the following line
     call vundle#end()            " required
@@ -507,6 +507,9 @@ function! s:config_easyfuzzymotion(...) abort
   \ }), get(a:, 1, {}))
 endfunction
 
+map x/ <Plug>(incsearch-easymotion-/)
+map x? <Plug>(incsearch-easymotion-?)
+map xg/ <Plug>(incsearch-easymotion-stay)
 noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 
 "-----------------------------------------------------------------
@@ -571,4 +574,6 @@ endif
 " plugin - 'vim-go'
 "-----------------------------------------------------------------
 " disable using gopls in vim-go, it's annoying.
-let g:go_gopls_enabled = 0
+let g:go_gopls_enabled = 1
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
