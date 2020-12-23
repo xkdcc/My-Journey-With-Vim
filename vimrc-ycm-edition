@@ -33,7 +33,7 @@ call vundle#begin()
     Plugin 'dkprice/vim-easygrep'
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets'
-    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'ycm-core/YouCompleteMe'
     Plugin 'davidhalter/jedi-vim'
     Plugin 'mfukar/robotframework-vim'
     Plugin 'xkdcc/Session-Viminfo-Management'
