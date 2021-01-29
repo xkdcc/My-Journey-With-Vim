@@ -40,7 +40,7 @@ call vundle#begin()
     Plugin 'thosakwe/vim-flutter'
     Plugin 'Yggdroot/indentLine'
     Plugin 'tpope/vim-surround'
-    Plugin 'AndrewRadev/tagalong.vim
+    Plugin 'AndrewRadev/tagalong.vim'
 
     " All of your Plugins must be added before the following line
     call vundle#end()            " required
