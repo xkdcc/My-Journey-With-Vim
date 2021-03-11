@@ -47,6 +47,7 @@ call vundle#begin()
     Plugin 'Yggdroot/indentLine'
     Plugin 'tpope/vim-surround'
     Plugin 'AndrewRadev/tagalong.vim'
+    Plugin 'mhinz/vim-startify'
 
     " All of your Plugins must be added before the following line
     call vundle#end()            " required
